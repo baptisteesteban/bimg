@@ -14,15 +14,7 @@ if (NOT have_include_print)
     message(ERROR "Compiler must support <print> include.")
 endif (NOT have_include_print)
 
-add_library(stb_image OBJECT src/io/stb_image.c)
-
-add_library(bimg)
-target_sources(bimg PRIVATE
-    src/io/imread.cpp
-    src/io/imwrite.cpp
-)
-target_include_directories(bimg PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(bimg PRIVATE stb_image)
+add_subdirectory(bimg)
 
 if (ENABLE_TESTS)
     enable_testing()
