@@ -1,0 +1,36 @@
+name: Build and Test
+on: push
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up GCC
+        uses: egor-tensin/setup-gcc@v2
+        with:
+          version: 16
+          platform: x64
+
+      - name: Install GTest
+        run: sudo apt update -y && sudo apt install -y libgtest-dev
+
+      - name: Get latest CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+
+      - name: Configure Project
+        run: cmake --preset debug
+        env:
+          CFLAGS: -fsanitize=address
+          CXXFLAGS: -fsanitize=address
+
+      - name: Build Project
+        run: cmake --build --preset debug
+
+      - name: Test Project
+        run: ctest --preset debug
