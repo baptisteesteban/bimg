@@ -1,3 +1,4 @@
+#include <bimg/core/neighborhoods/c8.hpp>
 #include <bimg/distance_transforms/generalised_geodesic.hpp>
 #include <bimg/io/imread.hpp>
 #include <bimg/io/imwrite.hpp>
@@ -8,15 +9,17 @@ int main(int argc, char* argv[])
 {
   using namespace bimg;
 
-  if (argc < 4)
+  if (argc < 5)
   {
-    std::print("Usage: {} input_image[grayscale] input_mask[grayscale] output_image[grayscale]\n", argv[0]);
+    std::print("Usage: {} input_image[grayscale] input_mask[grayscale] lambda[0 - 1] output_image[grayscale]\n",
+               argv[0]);
     return 1;
   }
 
   const char* input_filename        = argv[1];
   const char* input_mask_filename   = argv[2];
-  const char* output_image_filename = argv[3];
+  const float lambda                = std::atof(argv[3]);
+  const char* output_image_filename = argv[4];
 
   image2d<std::uint8_t> img;
   image2d<std::uint8_t> mask_int;
@@ -27,7 +30,7 @@ int main(int argc, char* argv[])
   for (auto p : mask_int.domain())
     mask(p) = mask_int(p) > 0 ? true : false;
 
-  const auto dt_float = dt::generalised_geodesic(img, mask);
+  const auto dt_float = dt::generalised_geodesic(img, mask, c8, lambda);
 
   float max_d = 0;
   for (auto p : dt_float.domain())

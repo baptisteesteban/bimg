@@ -3,14 +3,24 @@
 #include <bimg/core/image2d.hpp>
 #include <bimg/core/neighborhoods/c4.hpp>
 
+#include <cmath>
 #include <limits>
 #include <queue>
 #include <vector>
 
 namespace bimg::dt
 {
-  template <typename T>
-  image2d<float> generalised_geodesic(const image2d<T>& img, const image2d<bool>& mask)
+
+  template <typename T, typename N>
+  image2d<float> generalised_geodesic(const image2d<T>& img, const image2d<bool>& mask, const N& nbh,
+                                      float lambda = 0.5);
+
+  /*
+   * Implementation
+   */
+
+  template <typename T, typename N>
+  image2d<float> generalised_geodesic(const image2d<T>& img, const image2d<bool>& mask, const N& nbh, float lambda)
   {
     using queue_value_t = std::pair<float, point2d>;
     image2d<float> res(img.width(), img.height());
@@ -31,6 +41,7 @@ namespace bimg::dt
       visited(p) = false;
     }
 
+    const float lambda_eucl = 1 - lambda;
     // Propagation
     while (!q.empty())
     {
@@ -42,11 +53,13 @@ namespace bimg::dt
 
       visited(p) = true;
 
-      for (auto n : c4(p))
+      for (auto n : nbh(p))
       {
         if (!res.domain().has(n) || visited(n))
           continue;
-        const float d_new = res(p) + std::abs(static_cast<float>(img(p)) - static_cast<float>(img(n)));
+        const float d_new = res(p) +
+                            lambda_eucl * std::sqrt(static_cast<float>(p.x * p.x) + static_cast<float>(p.y * p.y)) +
+                            lambda * std::abs(static_cast<float>(img(p)) - static_cast<float>(img(n)));
         if (d_new < res(n))
         {
           res(n) = d_new;
