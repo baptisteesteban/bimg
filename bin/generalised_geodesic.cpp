@@ -21,6 +21,8 @@ int main(int argc, char* argv[])
   const float lambda                = std::atof(argv[3]);
   const char* output_image_filename = argv[4];
 
+  std::print("Generalised geodesic with lambda {}\n", lambda);
+
   image2d<std::uint8_t> img;
   image2d<std::uint8_t> mask_int;
   io::imread(input_filename, img);

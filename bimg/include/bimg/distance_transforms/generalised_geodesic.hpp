@@ -57,8 +57,11 @@ namespace bimg::dt
       {
         if (!res.domain().has(n) || visited(n))
           continue;
+
+        const int   dx    = p.x - n.x;
+        const int   dy    = p.y - n.y;
         const float d_new = res(p) +
-                            lambda_eucl * std::sqrt(static_cast<float>(p.x * p.x) + static_cast<float>(p.y * p.y)) +
+                            lambda_eucl * std::sqrt(static_cast<float>(dx * dx) + static_cast<float>(dy * dy)) +
                             lambda * std::abs(static_cast<float>(img(p)) - static_cast<float>(img(n)));
         if (d_new < res(n))
         {
