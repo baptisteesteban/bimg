@@ -1,0 +1,2 @@
+add_executable(generalised_geodesic generalised_geodesic.cpp)
+target_link_libraries(generalised_geodesic PRIVATE bimg)

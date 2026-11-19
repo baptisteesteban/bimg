@@ -9,5 +9,6 @@ endmacro()
 
 
 add_subdirectory(core)
+add_subdirectory(distance_transforms)
 add_subdirectory(io)
 add_subdirectory(labeling)

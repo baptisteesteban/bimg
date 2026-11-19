@@ -15,6 +15,7 @@ if (NOT have_include_print)
 endif (NOT have_include_print)
 
 add_subdirectory(bimg)
+add_subdirectory(bin)
 
 if (ENABLE_TESTS)
     enable_testing()
