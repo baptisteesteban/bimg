@@ -1,2 +1,5 @@
 add_executable(generalised_geodesic generalised_geodesic.cpp)
 target_link_libraries(generalised_geodesic PRIVATE bimg)
+
+add_executable(level_lines_distance_transform level_lines_distance_transform.cpp)
+target_link_libraries(level_lines_distance_transform PRIVATE bimg)
